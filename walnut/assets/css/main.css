@@ -214,6 +214,35 @@ input, select, textarea {
 	}
 
 /* BG */
+		/* 移动端背景图片100%覆盖 */
+		#bg {
+			background: #348cb2 url("walnut/assets/css/images/bg.jpg") center/cover no-repeat;
+			height: 100%;
+			width: 100%;
+		}
+		
+		/* 覆盖原有移动端背景动画 */
+		@media screen and (max-width: 736px) {
+			#bg {
+				-moz-animation: none !important;
+				-webkit-animation: none !important;
+				-ms-animation: none !important;
+				animation: none !important;
+				background-size: cover !important;
+				width: 100% !important;
+			}
+		}
+		
+		@media screen and (max-width: 480px) {
+			#bg {
+				-moz-animation: none !important;
+				-webkit-animation: none !important;
+				-ms-animation: none !important;
+				animation: none !important;
+				background-size: cover !important;
+				width: 100% !important;
+			}
+		}
 
 	#bg {
 		-moz-animation: bg 60s linear infinite;
