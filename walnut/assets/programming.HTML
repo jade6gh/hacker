@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://png.pngtree.com/png-vector/20240316/ourlarge/pngtree-hacker-thief-hacking-into-a-computer-vector-illustration-png-image_11985087.png">
+    <title>编程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: #f8f9fa;
+            overflow-x: hidden;
+        }
+
+        /* 导航栏 */
+        .nav-container {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            padding: 1rem 5%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1000;
+        }
+
+        .nav-menu {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        /* 蜘蛛样式优化 */
+        #destiny-spider {
+            position: fixed;
+            pointer-events: none;
+            transition: transform 0.15s linear;
+            z-index: 9999;
+            font-size: 24px;
+        }
+
+        /* 导航网格布局 */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            padding: 2rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .category {
+            background: rgba(255,255,255,0.95);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .category h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .category a {
+            display: block;
+            padding: 0.5rem;
+            color: #7f8c8d;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .category a:hover {
+            transform: translateX(10px);
+            color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-container">
+        <div class="nav-menu">
+            <h2 style="color: #ecf0f1;">天机网络</h2>
+            <div class="nav-links">
+                <a href="penetrate.html">技术平台</a>
+                <a href="../index.html">学习资源</a>
+            </div>
+        </div>
+    </nav>
+
+
+    <div id="destiny-spider">🕷</div>
+
+    <!-- 导航站点 -->
+    <div class="nav-grid">
+
+        <div class="category" id="security">
+            <h3>python</h3>
+            <a href="./py/下雨.py" download="new_filename.py">显示下雨</a>
+            <a href="./py/U盘扫描.py " download="new_filename.py">在U盘扫描搜索要的东西</a>
+            <a href="./py/批量重命名文件.py" download="new_filename.py">批量重命名文件和后缀</a>
+            <a href="./py/身份证自动补行.py " download="new_filename.py">身份证自动补行</a>
+            <a href="./py/图片爬取/" download="new_filename">图片爬取</a>
+
+
+        </div>
+
+        <div class="category" id="tech">
+            <h3>php</h3>
+            <a href="./php/#" download="new_filename">没有</a>
+
+        </div>
+
+        <!-- 综合学习 -->
+        <div class="category" id="learning">
+            <h3>java</h3>
+            <a href="./java/#" download="new_filename">没有</a>
+
+        </div>
+
+        <!-- 工具资源 -->
+        <div class="category" id="tools">
+            <h3>c/c++</h3>
+            <a href="./c/Image_crawling.c" download="new_filename">图片爬取</a>
+  
+        </div>
+
+    </div>
+
+    <script>
+        // 蜘蛛动画优化
+        const spider = document.getElementById('destiny-spider');
+        let mouseX = 0, mouseY = 0;
+        let spiderX = 0, spiderY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX - 10;  // 精确跟随
+            mouseY = e.clientY - 5;
+        });
+
+        function animate() {
+            spiderX += (mouseX - spiderX) * 0.2;
+            spiderY += (mouseY - spiderY) * 0.2;
+
+            spider.style.transform = `translate(${spiderX}px, ${spiderY}px)`;
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // 动态生成完整100站点（示例数据）
+        const fullSites = {
+            "安全工具": [
+                ["Metasploit", "https://www.metasploit.com/", "渗透测试框架"],
+                ["Wireshark", "https://www.wireshark.org/", "网络抓包工具"],
+                ["Kali Linux", "https://www.kali.org/", "安全操作系统"]
+            ],
+            "开发资源": [
+                ["MDN Web Docs", "https://developer.mozilla.org/", "开发者文档"],
+                ["npm", "https://www.npmjs.com/", "包管理工具"],
+                ["Docker Hub", "https://hub.docker.com/", "容器镜像库"]
+            ]
+
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<title>hacker丨个人主页</title>
+	<meta charset="utf-8" />
+	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<meta name='description' content='jade，道极个人导航页，个人主页。'>
+	<meta name='keywords' content='jade,道极主页'>
+	<meta name='robots' content='index,follow'>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" href="assets/css/main.css" />
+	<noscript>
+		<link rel="stylesheet" href="assets/css/noscript.css" />
+	</noscript>
+
+<body class="is-preload">
+	<div id="wrapper">
+		<div id="bg"></div>
+		<div id="overlay"></div>
+		<div id="main">
+
+			<!-- Header -->
+			<header id="header">
+				<!-- 新增头像 -->
+				<img src="assets/css/images/6bg.png" 
+					alt="头像" class="header-avatar">
+				
+				<h1>帅道无上大宗师</h1>
+				<p>琼，一个网络，HTML，csss，JavaScript，python，php，sql，c,新手简称啥都会，啥都不精通的学徒</p>
+				<p>A novice who envies hackers</p>
+				<nav>
+					<ul>
+						<!-- 调整顺序：将邮件图标移到正确位置 -->
+						<li><a href="assets/penetrate.html" target="_blank" class="icon solid fa-blog" title="每天都是最好的自己"><span class="label">道极</span></a></li>
+						<li><a href="assets/programming.HTML" target="_blank" class="icon solid fa-file-code" title="编程测试"><span class="label">学徒编程</span></a></li>
+						<li><a href="https://github.com/jade6gh" target="_blank" rel="nofollow noopener" class="icon brands fa-github-alt" title="Fork me on Github"><span class="label">Github</span></a></li>
+					</ul>
+				</nav>
+			</header>
+
+			<!-- Footer -->
+			<footer id="footer">
+				<span class="copyright">&copy; 2024 <a href="#" target="_blank">jade</a>丨<a
+						href="#" target="_blank" rel="nofollow">京ICP备1000000号-1</a></span>
+			</footer>
+			
+			<!-- 音乐面板 -->
+			<div class="music-mini-panel">
+				<div class="music-trigger">
+					<i class="fas fa-music"></i>
+				</div>
+				<div class="music-list">
+					<audio controls loop>
+						<source src="assets/music/song1.mp3" type="audio/mpeg">
+						你的浏览器不支持音频播放
+					</audio>
+					<audio controls loop>
+						<source src="assets/music/song2.mp3" type="audio/mpeg">
+						你的浏览器不支持音频播放
+					</audio>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+	<script>
+		window.onload = function () { 
+			document.body.classList.remove('is-preload'); 
+		}
+		window.ontouchmove = function () { return false; }
+		window.onorientationchange = function () { document.body.scrollTop = 0; }
+		
+		// 模拟控制台输出
+		setTimeout(() => {
+			console.log("%c%c%chttp://www.nange.cn", 
+				"line-height:28px;", 
+				"line-height:28px;padding:4px;background:#2ccbe6;color:#FADFA3;font-size:14px;", 
+				"padding:4px 4px 4px 2px;background:#ff146d;color:green;line-height:28px;font-size:12px;"
+			);
+		}, 2000);
+	</script>
+</body>
+
+</html>
