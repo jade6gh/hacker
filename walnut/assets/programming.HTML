@@ -3,181 +3,470 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="https://png.pngtree.com/png-vector/20240316/ourlarge/pngtree-hacker-thief-hacking-into-a-computer-vector-illustration-png-image_11985087.png">
-    <title>编程</title>
+    <title>Web应用渗透测试 - 信息收集流程</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Courier New', monospace;
         }
-
+        
         body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background: #f8f9fa;
+            background-color: #0a0a0a;
+            color: #00ff00;
+            line-height: 1.6;
+            padding: 20px;
             overflow-x: hidden;
-        }
-
-        /* 导航栏 */
-        .nav-container {
-            background: linear-gradient(135deg, #2c3e50, #34495e);
-            padding: 1rem 5%;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             position: relative;
-            z-index: 1000;
         }
-
-        .nav-menu {
+        
+        /* 终端效果 */
+        .terminal {
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .terminal::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00ff00, transparent);
+            animation: scanline 3s linear infinite;
+        }
+        
+        @keyframes scanline {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+        
+        /* 标题样式 */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px #00ff00;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            letter-spacing: 3px;
+            animation: flicker 3s infinite alternate;
+        }
+        
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                opacity: 1;
+            }
+            20%, 24%, 55% {
+                opacity: 0.5;
+            }
+        }
+        
+        /* 流程阶段样式 */
+        .phase {
+            margin-bottom: 30px;
+            border-left: 2px solid #00ff00;
+            padding-left: 15px;
+        }
+        
+        .phase-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #00ff00;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .subphase {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .subphase-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #00cc00;
+        }
+        
+        /* 步骤样式 */
+        .step {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .step::before {
+            content: ">";
+            position: absolute;
+            left: 0;
+            color: #00ff00;
+        }
+        
+        /* 工具列表样式 */
+        .tools {
             display: flex;
-            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .tool {
+            background-color: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .tool:hover {
+            background-color: rgba(0, 255, 0, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+        
+        /* 交互元素 */
+        .interactive {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px dashed #00ff00;
+            border-radius: 5px;
+        }
+        
+        .command-line {
+            display: flex;
             align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
+            margin-bottom: 10px;
         }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
+        
+        .prompt {
+            color: #00ff00;
+            margin-right: 10px;
         }
-
-        .nav-links a {
-            color: #ecf0f1;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
+        
+        .command-input {
+            background: transparent;
+            border: none;
+            color: #00ff00;
+            outline: none;
+            flex-grow: 1;
+            font-family: 'Courier New', monospace;
         }
-
-        /* 蜘蛛样式优化 */
-        #destiny-spider {
+        
+        .output {
+            height: 200px;
+            overflow-y: auto;
+            border: 1px solid #00ff00;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .phase-title {
+                font-size: 1.3rem;
+            }
+            
+            .subphase-title {
+                font-size: 1.1rem;
+            }
+        }
+        
+        /* 矩阵雨效果 */
+        #matrix {
             position: fixed;
-            pointer-events: none;
-            transition: transform 0.15s linear;
-            z-index: 9999;
-            font-size: 24px;
-        }
-
-        /* 导航网格布局 */
-        .nav-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            padding: 2rem 5%;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .category {
-            background: rgba(255,255,255,0.95);
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .category h3 {
-            color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .category a {
-            display: block;
-            padding: 0.5rem;
-            color: #7f8c8d;
-            text-decoration: none;
-            transition: transform 0.3s ease;
-        }
-
-        .category a:hover {
-            transform: translateX(10px);
-            color: #3498db;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
         }
     </style>
 </head>
 <body>
-    <nav class="nav-container">
-        <div class="nav-menu">
-            <h2 style="color: #ecf0f1;">天机网络</h2>
-            <div class="nav-links">
-                <a href="penetrate.html">技术平台</a>
-                <a href="../index.html">学习资源</a>
+    <canvas id="matrix"></canvas>
+    
+    <div class="header">
+        <h1>Web应用渗透测试 - 信息收集流程</h1>
+        <p>新手小白完整指南 - 黑客风格</p>
+    </div>
+    
+    <div class="terminal">
+        <div class="phase">
+            <h2 class="phase-title">第一阶段：明确目标与范围确认</h2>
+            <div class="step">确认授权 - 永远第一步！必须有书面合法授权</div>
+            <div class="step">理解业务 - 分析目标公司业务类型</div>
+            <div class="step">明确范围 - 确定可测试的域名/IP段</div>
+        </div>
+    </div>
+    
+    <div class="terminal">
+        <div class="phase">
+            <h2 class="phase-title">第二阶段：外围信息收集（不直接触碰目标）</h2>
+            
+            <div class="subphase">
+                <h3 class="subphase-title">子阶段 2.1：域名与企业信息搜集</h3>
+                <div class="step">备案信息查询 - 工信部备案系统、站长之家</div>
+                <div class="step">企业信息收集 - 天眼查、企查查、LinkedIn</div>
+                <div class="step">注册域名发现 - Whois反查、证书透明度日志</div>
+                <div class="step">DNS信息反查 - A记录、MX记录、TXT记录等</div>
+                
+                <div class="tools">
+                    <div class="tool">nslookup</div>
+                    <div class="tool">dig</div>
+                    <div class="tool">DNSDumpster</div>
+                    <div class="tool">crt.sh</div>
+                </div>
+            </div>
+            
+            <div class="subphase">
+                <h3 class="subphase-title">子阶段 2.2：网络空间与威胁情报</h3>
+                <div class="step">IP段发现 - whois命令、ipinfo.io</div>
+                <div class="step">证书查询 - crt.sh、censys.io</div>
+                <div class="step">网络空间引擎搜索 - Shodan、Fofa、ZoomEye</div>
+                <div class="step">威胁情报平台 - 微步在线、VirusTotal</div>
+                
+                <div class="tools">
+                    <div class="tool">Shodan</div>
+                    <div class="tool">Fofa</div>
+                    <div class="tool">ZoomEye</div>
+                    <div class="tool">微步在线</div>
+                </div>
             </div>
         </div>
-    </nav>
-
-
-    <div id="destiny-spider">🕷</div>
-
-    <!-- 导航站点 -->
-    <div class="nav-grid">
-
-        <div class="category" id="security">
-            <h3>python</h3>
-            <a href="./py/下雨.py" download="new_filename.py">显示下雨</a>
-            <a href="./py/U盘扫描.py " download="new_filename.py">在U盘扫描搜索要的东西</a>
-            <a href="./py/批量重命名文件.py" download="new_filename.py">批量重命名文件和后缀</a>
-            <a href="./py/身份证自动补行.py " download="new_filename.py">身份证自动补行</a>
-            <a href="./py/图片爬取/" target="_blank">图片爬取</a>
-
-
+    </div>
+    
+    <div class="terminal">
+        <div class="phase">
+            <h2 class="phase-title">第三阶段：主动侦察与枚举（直接与目标交互）</h2>
+            
+            <div class="subphase">
+                <h3 class="subphase-title">子阶段 3.1：子域名枚举</h3>
+                <div class="step">字典爆破 - 使用工具和字典进行猜测</div>
+                <div class="step">爬虫提取 - 从网页源代码、JS文件中寻找</div>
+                <div class="step">综合平台 - 使用集成多种方法的工具</div>
+                
+                <div class="tools">
+                    <div class="tool">subfinder</div>
+                    <div class="tool">amass</div>
+                    <div class="tool">OneForAll</div>
+                    <div class="tool">ksubdomain</div>
+                </div>
+            </div>
+            
+            <div class="subphase">
+                <h3 class="subphase-title">子阶段 3.2：端口与服务探测</h3>
+                <div class="step">TCP端口扫描 - 识别开放端口和服务</div>
+                <div class="step">UDP端口扫描 - 探测UDP服务</div>
+                <div class="step">服务版本识别 - 确定运行的服务和版本</div>
+                
+                <div class="tools">
+                    <div class="tool">Nmap</div>
+                    <div class="tool">Masscan</div>
+                </div>
+            </div>
+            
+            <div class="subphase">
+                <h3 class="subphase-title">子阶段 3.3：Web应用技术栈指纹识别</h3>
+                <div class="step">程序语言识别 - PHP、Java、Python等</div>
+                <div class="step">框架源码识别 - WordPress、Django等</div>
+                <div class="step">搭建平台识别 - Nginx、Apache、IIS</div>
+                <div class="step">数据库类型识别 - MySQL、PostgreSQL等</div>
+                <div class="step">操作系统识别 - Linux、Windows等</div>
+                
+                <div class="tools">
+                    <div class="tool">Wappalyzer</div>
+                    <div class="tool">WhatWeb</div>
+                    <div class="tool">BuiltWith</div>
+                </div>
+            </div>
+            
+            <div class="subphase">
+                <h3 class="subphase-title">子阶段 3.4：目录与文件枚举</h3>
+                <div class="step">目录爆破 - 发现隐藏目录和文件</div>
+                <div class="step">备份文件查找 - 寻找.bak、.old等文件</div>
+                <div class="step">配置文件查找 - 寻找.env、config等文件</div>
+                <div class="step">敏感文件发现 - robots.txt、sitemap.xml等</div>
+                
+                <div class="tools">
+                    <div class="tool">dirsearch</div>
+                    <div class="tool">gobuster</div>
+                    <div class="tool">ffuf</div>
+                </div>
+            </div>
+            
+            <div class="subphase">
+                <h3 class="subphase-title">子阶段 3.5：关联资产与员工信息</h3>
+                <div class="step">GitHub/GitLab搜索 - 寻找泄露的代码和凭证</div>
+                <div class="step">云存储枚举 - 检查配置错误的S3桶等</div>
+                <div class="step">邮箱收集 - 收集员工邮箱信息</div>
+                
+                <div class="tools">
+                    <div class="tool">theHarvester</div>
+                    <div class="tool">s3scanner</div>
+                    <div class="tool">GitHub搜索</div>
+                </div>
+            </div>
         </div>
-
-        <div class="category" id="tech">
-            <h3>php</h3>
-            <a href="./php/#" download="new_filename">没有</a>
-
+    </div>
+    
+    <div class="terminal">
+        <div class="phase">
+            <h2 class="phase-title">第四阶段：信息整理与漏洞关联</h2>
+            <div class="step">资产清单整理 - 创建详细的资产清单</div>
+            <div class="step">绘制攻击面图 - 可视化所有资产关系</div>
+            <div class="step">初步漏洞假设 - 基于收集信息提出漏洞假设</div>
+            <div class="step">输出报告 - 生成完整的信息收集报告</div>
         </div>
-
-        <!-- 综合学习 -->
-        <div class="category" id="learning">
-            <h3>java</h3>
-            <a href="./java/#" download="new_filename">没有</a>
-
+    </div>
+    
+    <div class="terminal interactive">
+        <h3 class="phase-title">模拟终端</h3>
+        <p>尝试输入以下命令进行模拟：</p>
+        <ul>
+            <li>nmap -sS target.com</li>
+            <li>subfinder -d target.com</li>
+            <li>dirsearch -u https://target.com</li>
+        </ul>
+        
+        <div class="command-line">
+            <span class="prompt">hacker@terminal:~$</span>
+            <input type="text" class="command-input" id="commandInput" placeholder="输入命令...">
         </div>
-
-        <!-- 工具资源 -->
-        <div class="category" id="tools">
-            <h3>c/c++</h3>
-            <a href="./c/Image_crawling.c" download="new_filename">图片爬取</a>
-  
+        
+        <div class="output" id="output">
+            <div>欢迎使用渗透测试信息收集模拟终端</div>
+            <div>输入命令开始模拟...</div>
         </div>
-
     </div>
 
     <script>
-        // 蜘蛛动画优化
-        const spider = document.getElementById('destiny-spider');
-        let mouseX = 0, mouseY = 0;
-        let spiderX = 0, spiderY = 0;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX - 10;  // 精确跟随
-            mouseY = e.clientY - 5;
-        });
-
-        function animate() {
-            spiderX += (mouseX - spiderX) * 0.2;
-            spiderY += (mouseY - spiderY) * 0.2;
-
-            spider.style.transform = `translate(${spiderX}px, ${spiderY}px)`;
-            requestAnimationFrame(animate);
+        // 矩阵雨效果
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const chars = "01";
+        const charArray = chars.split("");
+        
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        
+        const drops = [];
+        
+        for(let x = 0; x < columns; x++) {
+            drops[x] = 1;
         }
-        animate();
-
-        // 动态生成完整100站点（示例数据）
-        const fullSites = {
-            "安全工具": [
-                ["Metasploit", "https://www.metasploit.com/", "渗透测试框架"],
-                ["Wireshark", "https://www.wireshark.org/", "网络抓包工具"],
-                ["Kali Linux", "https://www.kali.org/", "安全操作系统"]
-            ],
-            "开发资源": [
-                ["MDN Web Docs", "https://developer.mozilla.org/", "开发者文档"],
-                ["npm", "https://www.npmjs.com/", "包管理工具"],
-                ["Docker Hub", "https://hub.docker.com/", "容器镜像库"]
-            ]
-
-        };
+        
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.04)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = "#00ff00";
+            ctx.font = fontSize + "px monospace";
+            
+            for(let i = 0; i < drops.length; i++) {
+                const text = charArray[Math.floor(Math.random() * charArray.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                
+                drops[i]++;
+            }
+        }
+        
+        setInterval(drawMatrix, 35);
+        
+        // 窗口大小改变时调整canvas
+        window.addEventListener('resize', function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+        
+        // 模拟终端交互
+        const commandInput = document.getElementById('commandInput');
+        const output = document.getElementById('output');
+        
+        commandInput.addEventListener('keypress', function(e) {
+            if(e.key === 'Enter') {
+                const command = this.value.trim();
+                this.value = '';
+                
+                let response = '';
+                
+                if(command.includes('nmap')) {
+                    response = `
+Starting Nmap 7.92 ( https://nmap.org ) at 2023-10-05 12:00 UTC
+Nmap scan report for target.com (192.168.1.1)
+Host is up (0.0010s latency).
+Not shown: 996 filtered tcp ports (no-response)
+PORT     STATE SERVICE    VERSION
+22/tcp   open  ssh        OpenSSH 8.2p1 Ubuntu 4ubuntu0.5 (Ubuntu Linux; protocol 2.0)
+80/tcp   open  http       Apache httpd 2.4.41 ((Ubuntu))
+443/tcp  open  ssl/http   Apache httpd 2.4.41 ((Ubuntu))
+3306/tcp open  mysql      MySQL 5.5.5-10.3.32-MariaDB-1:10.3.32+maria~focal
+                    `;
+                } else if(command.includes('subfinder')) {
+                    response = `
+www.target.com
+api.target.com
+admin.target.com
+dev.target.com
+mail.target.com
+blog.target.com
+                    `;
+                } else if(command.includes('dirsearch')) {
+                    response = `
+[12:00:01] Starting: 
+[12:00:02] 301 -  315B  - /admin  ->  https://target.com/admin/
+[12:00:03] 200 -    2KB - /index.html
+[12:00:04] 200 -    1KB - /robots.txt
+[12:00:05] 403 -  277B  - /server-status
+[12:00:06] 200 -    4KB - /login.php
+                    `;
+                } else if(command === 'clear') {
+                    output.innerHTML = '';
+                    return;
+                } else {
+                    response = `命令 "${command}" 未找到或无法执行`;
+                }
+                
+                const newLine = document.createElement('div');
+                newLine.innerHTML = `<span style="color:#00ff00">hacker@terminal:~$</span> ${command}<br>${response}`;
+                output.appendChild(newLine);
+                output.scrollTop = output.scrollHeight;
+            }
+        });
+        
+        // 工具点击效果
+        document.querySelectorAll('.tool').forEach(tool => {
+            tool.addEventListener('click', function() {
+                const toolName = this.textContent;
+                output.innerHTML += `<div>正在启动 ${toolName}...</div>`;
+                output.scrollTop = output.scrollHeight;
+            });
+        });
     </script>
 </body>
 </html>
