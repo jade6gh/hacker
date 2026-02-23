@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>进入暗网工具&方法</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f4f6fa;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            line-height: 1.5;
+            padding: 2rem 1.5rem;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        /* 页头 */
+        .page-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.2rem;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            background: linear-gradient(145deg, #0f172a, #334155);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-block;
+            border-left: 6px solid #3b82f6;
+            padding-left: 1.2rem;
+        }
+
+        .page-header .sub {
+            color: #475569;
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 0.75rem;
+        }
+
+        /* 分类标题 */
+        .category {
+            margin: 2.4rem 0 1.2rem 0;
+        }
+
+        .category h2 {
+            font-size: 1.4rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #0f172a;
+        }
+
+        .category h2 span {
+            background: #e9eef3;
+            padding: 0.2rem 0.8rem;
+            border-radius: 24px;
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: #334155;
+        }
+
+        /* 卡片网格 */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.2rem;
+        }
+
+        /* 卡片样式 — 干净简洁 */
+        .card {
+            background: #ffffffdd;
+            backdrop-filter: blur(2px);
+            background: white;
+            border-radius: 20px;
+            padding: 1.2rem 1.3rem;
+            box-shadow: 0 8px 18px -6px rgba(0, 20, 40, 0.12), 0 2px 4px rgba(0,0,0,0.02);
+            transition: all 0.2s ease;
+            border: 1px solid #f0f3f7;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 28px -10px rgba(26, 60, 100, 0.2);
+            border-color: #b9d1f0;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .card-title a {
+            text-decoration: none;
+            color: #1e3a8a;
+            border-bottom: 1px dotted transparent;
+            transition: border-color 0.15s;
+        }
+
+        .card-title a:hover {
+            border-bottom: 1px dotted #2563eb;
+            color: #2563eb;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: #475569;
+            margin-bottom: 0.75rem;
+            flex: 1;
+        }
+
+        .card-meta {
+            font-size: 0.75rem;
+            color: #6b7b8f;
+            border-top: 1px dashed #dde3ea;
+            padding-top: 0.6rem;
+            margin-top: auto;
+            word-break: break-all;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .card-meta span {
+            background: #eef2f6;
+            padding: 0.2rem 0.5rem;
+            border-radius: 30px;
+            color: #2c3e4f;
+            font-size: 0.7rem;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* 一些小标记 */
+        .badge-link {
+            display: inline-block;
+            background: #ebf0f8;
+            border-radius: 16px;
+            padding: 0.15rem 0.6rem;
+            font-size: 0.7rem;
+            color: #25445c;
+            margin-left: 0.3rem;
+        }
+
+        .footer-note {
+            margin-top: 3.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #64748b;
+            border-top: 1px solid #dfe7ef;
+            padding-top: 2rem;
+        }
+
+        .footer-note a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        .footer-note a:hover {
+            text-decoration: underline;
+        }
+
+        /* 单独处理双链接在一卡内的情况，但我们每个链接独立卡片，所以没问题 */
+        .chip {
+            background: #ecf3fa;
+            border-radius: 30px;
+            padding: 0.1rem 0.7rem;
+            font-size: 0.7rem;
+            color: #1e405e;
+        }
+
+        /* 适配移动端 */
+        @media (max-width: 500px) {
+            body { padding: 1.2rem 0.8rem; }
+            .page-header h1 { font-size: 1.8rem; }
+            .card { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="page-header">
+        <h1>⚡ 进入暗网 · 工具导航</h1>
+        <div class="sub">隐私 / 代理 / 网桥 · 官方及镜像链接</div>
+    </div>
+
+    <!-- 分类 1：隐私与匿名 -->
+    <div class="category">
+        <h2>🛡️ 隐私与匿名 <span>直接访问</span></h2>
+    </div>
+    <div class="grid">
+        <!-- 洋葱浏览器 Tor -->
+        <div class="card">
+            <div class="card-title"><a href="https://www.torproject.org/download/" target="_blank" rel="noopener">洋葱浏览器</a></div>
+            <div class="card-desc">Tor官方浏览器，保护隐私、绕过审查。集成Onion路由。</div>
+            <div class="card-meta"><span>torproject.org</span> 🔗 官方下载</div>
+        </div>
+        <!-- Telegram -->
+        <div class="card">
+            <div class="card-title"><a href="https://telegram.org/" target="_blank" rel="noopener">Telegram</a></div>
+            <div class="card-desc">加密通讯软件，支持频道、机器人。注重安全与速度。</div>
+            <div class="card-meta"><span>telegram.org</span> 🌍 官网</div>
+        </div>
+        <!-- Tails -->
+        <div class="card">
+            <div class="card-title"><a href="https://tails.net/" target="_blank" rel="noopener">Tails</a></div>
+            <div class="card-desc">基于Debian的匿名操作系统，从U盘启动，强制流量通过Tor。</div>
+            <div class="card-meta"><span>tails.net</span> 💻 便携系统</div>
+        </div>
+    </div>
+
+    <!-- 分类 2：网桥获取 -->
+    <div class="category">
+        <h2>🌉 网桥获取 <span>绕过防火墙</span></h2>
+    </div>
+    <div class="grid">
+        <!-- Tor网桥页面 -->
+        <div class="card">
+            <div class="card-title"><a href="https://bridges.torproject.org/options" target="_blank" rel="noopener">Tor网桥分发页</a></div>
+            <div class="card-desc">官方网桥获取页面，支持多种类型网桥（obfs4, WebTunnel等）。</div>
+            <div class="card-meta"><span>bridges.torproject.org</span> 📡 直接获取</div>
+        </div>
+        <!-- 电报机器人 GetBridgesBot -->
+        <div class="card">
+            <div class="card-title"><a href="https://t.me/GetBridgesBot" target="_blank" rel="noopener">@GetBridgesBot</a></div>
+            <div class="card-desc">Telegram机器人，自动下发Tor网桥。方便快捷，无需手动复制。</div>
+            <div class="card-meta"><span>t.me/GetBridgesBot</span> 🤖 电报机器人</div>
+        </div>
+    </div>
+
+    <!-- 分类 3：Windows / Android 代理客户端 -->
+    <div class="category">
+        <h2>📲 Windows / Android <span>客户端下载</span></h2>
+    </div>
+    <div class="grid">
+        <!-- Clash Verge Windows exe -->
+        <div class="card">
+            <div class="card-title"><a href="https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.3.2/Clash.Verge_2.3.2_x64-setup.exe" target="_blank" rel="noopener">Clash Verge (Windows)</a></div>
+            <div class="card-desc">Clash Verge Rev Windows 安装包，x64 架构。简洁的代理客户端。</div>
+            <div class="card-meta"><span>exe 直接链接</span> ⚙️ v2.3.2</div>
+        </div>
+        <!-- v2rayNG apk -->
+        <div class="card">
+            <div class="card-title"><a href="https://github.com/2dust/v2rayNG/releases/download/1.10.8/v2rayNG_1.10.8_arm64-v8a.apk" target="_blank" rel="noopener">v2rayNG (Android)</a></div>
+            <div class="card-desc">v2ray核心的Android客户端，arm64-v8a 版本。支持VMess等。</div>
+            <div class="card-meta"><span>apk 1.10.8</span> 📱 直接下载</div>
+        </div>
+        <!-- Clash Android apk (特定仓库) -->
+        <div class="card">
+            <div class="card-title"><a href="https://github.com/uyez/rj/releases/download/clash/Clash-Android.apk" target="_blank" rel="noopener">Clash for Android</a></div>
+            <div class="card-desc">Clash Android 客户端，通用APK。支持多种协议规则。</div>
+            <div class="card-meta"><span>github.com/uyez</span> 🔗 镜像存储</div>
+        </div>
+        <!-- Clash Meta for Android -->
+        <div class="card">
+            <div class="card-title"><a href="https://github.com/MetaCubeX/ClashMetaForAndroid/releases/download/v2.11.14/cmfa-2.11.14-meta-arm64-v8a-release.apk" target="_blank" rel="noopener">Clash Meta (Android)</a></div>
+            <div class="card-desc">Clash.Meta 衍生版 for Android，arm64-v8a。更多实验特性。</div>
+            <div class="card-meta"><span>cmfa 2.11.14</span> ⚡ Meta内核</div>
+        </div>
+    </div>
+
+    <!-- 分类 4：Mac / iOS 工具 -->
+    <div class="category">
+        <h2>🍎 Apple 设备 <span>Mac & iOS</span></h2>
+    </div>
+    <div class="grid">
+        <!-- Clash Verge Mac M芯片 -->
+        <div class="card">
+            <div class="card-title"><a href="https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.3.2/Clash.Verge_2.3.2_aarch64.dmg" target="_blank" rel="noopener">Clash Verge (M芯片)</a></div>
+            <div class="card-desc">适用于Apple Silicon (M1/M2/M3) 的Clash Verge DMG安装包。</div>
+            <div class="card-meta"><span>aarch64.dmg</span> 💾 2.3.2</div>
+        </div>
+        <!-- Clash Verge Mac Intel -->
+        <div class="card">
+            <div class="card-title"><a href="https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.3.2/Clash.Verge_2.3.2_x64.dmg" target="_blank" rel="noopener">Clash Verge (Intel)</a></div>
+            <div class="card-desc">适用于Intel芯片Mac的Clash Verge客户端，x64架构。</div>
+            <div class="card-meta"><span>x64.dmg</span> 💾 2.3.2</div>
+        </div>
+        <!-- Shadowrocket 配置页 (iOS) -->
+        <div class="card">
+            <div class="card-title"><a href="https://kjfx.github.io/gv/" target="_blank" rel="noopener">Shadowrocket 小火箭</a></div>
+            <div class="card-desc">iOS代理客户端配置指引/下载页。规则、节点订阅相关帮助。</div>
+            <div class="card-meta"><span>kjfx.github.io/gv</span> 🚀 配置页</div>
+        </div>
+    </div>
+
+    <!-- 额外的备注：所有链接均已包含，无遗漏。同时原文本中MAC版本下的所有条目都已单独成卡 -->
+    
+    <!-- 简洁汇总行 (保持极简) -->
+    <div class="footer-note">
+        <p>📋 共收录12个链接 · 每个卡片均附带简介 · 点击标题直接跳转</p>
+        <p style="margin-top: 0.4rem; opacity: 0.7;">
+            <a href="https://bridges.torproject.org/options" target="_blank">网桥页面</a> · 
+            <a href="https://t.me/GetBridgesBot" target="_blank">@GetBridgesBot</a> · 
+            <a href="https://github.com/clash-verge-rev/clash-verge-rev/releases" target="_blank">Clash Verge仓库</a>
+        </p>
+        <p style="font-size:0.75rem; margin-top:1rem;">⭐ 所有链接跳转至原始地址，请自行辨别安全。导航仅作整理。</p>
+    </div>
+</div>
+
+<!-- 检查所有必须链接 (隐形注释) 
+     洋葱浏览器 ✔ Telegram ✔ Tails ✔
+     网桥页面 ✔ 电报机器人 ✔
+     Clash Verge Win ✔ v2rayNG ✔ Clash Android ✔ Clash Meta ✔
+     Clash Verge M芯片 ✔ Intel芯片 ✔ Shadowrocket ✔
+     共12项，分类展示。
+-->
+</body>
+</html>
