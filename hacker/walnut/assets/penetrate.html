@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecNav - 渗透测试资源导航</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #0a84ff;
+            --primary-dark: #0066cc;
+            --dark: #121212;
+            --darker: #0a0a0a;
+            --light: #f5f5f5;
+            --gray: #333;
+            --light-gray: #444;
+            --danger: #ff453a;
+            --success: #30d158;
+            --warning: #ff9f0a;
+            --hacker-green: #39ff14;
+        }
+        
+        body {
+            background: #0a0a0a;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(10, 132, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(57, 255, 20, 0.1) 0%, transparent 20%),
+                linear-gradient(to bottom, #0a0a0a, #121212);
+            color: var(--light);
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .logo i {
+            color: var(--hacker-green);
+        }
+        
+        .logo span {
+            background: linear-gradient(90deg, var(--primary), var(--hacker-green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+        
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            background: rgba(10, 132, 255, 0.2);
+            color: var(--hacker-green);
+        }
+        
+        .nav-links a.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 80px 20px 60px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(45deg, rgba(10, 132, 255, 0.05) 0%, transparent 50%),
+                linear-gradient(-45deg, rgba(57, 255, 20, 0.05) 0%, transparent 50%);
+            z-index: -1;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--primary), var(--hacker-green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(10, 132, 255, 0.3);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: #bbb;
+            line-height: 1.6;
+        }
+        
+        .search-box {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 16px 20px;
+            padding-left: 50px;
+            font-size: 18px;
+            border-radius: 50px;
+            border: 2px solid var(--light-gray);
+            background: rgba(20, 20, 20, 0.8);
+            color: white;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .search-box input:focus {
+            border-color: var(--hacker-green);
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: var(--hacker-green);
+        }
+        
+        /* Categories */
+        .categories {
+            padding: 50px 0 30px;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 4px solid var(--hacker-green);
+            padding-left: 15px;
+        }
+        
+        .section-title i {
+            color: var(--hacker-green);
+        }
+        
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .category-card {
+            background: rgba(30, 30, 30, 0.7);
+            border: 1px solid var(--light-gray);
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--hacker-green);
+            box-shadow: 0 10px 25px rgba(57, 255, 20, 0.2);
+        }
+        
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .category-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(10, 132, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--hacker-green);
+        }
+        
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .resource-list {
+            list-style: none;
+        }
+        
+        .resource-item {
+            padding: 12px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+        }
+        
+        .resource-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        
+        .resource-item:last-child {
+            border-bottom: none;
+        }
+        
+        .resource-item a {
+            color: #ddd;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s ease;
+        }
+        
+        .resource-item a:hover {
+            color: var(--hacker-green);
+        }
+        
+        .resource-item a i {
+            font-size: 14px;
+            color: var(--hacker-green);
+        }
+        
+        /* New resources section */
+        .new-resources {
+            padding: 30px 0;
+        }
+        
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .resource-card {
+            background: rgba(30, 30, 30, 0.6);
+            border: 1px solid var(--light-gray);
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .resource-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .resource-card i {
+            font-size: 24px;
+            color: var(--hacker-green);
+        }
+        
+        .resource-card-content {
+            flex: 1;
+        }
+        
+        .resource-card a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .resource-card a:hover {
+            color: var(--hacker-green);
+        }
+        
+        .resource-card .resource-desc {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-top: 5px;
+        }
+        
+        /* Footer */
+        footer {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--light-gray);
+            text-align: center;
+            color: #888;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin: 20px 0;
+        }
+        
+        .footer-links a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--hacker-green);
+        }
+        
+        .terminal {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--hacker-green);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 30px auto;
+            max-width: 600px;
+            font-family: 'Courier New', monospace;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .terminal::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(57, 255, 20, 0.05) 50%, rgba(0, 0, 0, 0.1) 50%);
+            background-size: 100% 4px;
+            z-index: 0;
+        }
+        
+        .terminal-header {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+        
+        .terminal-content {
+            position: relative;
+            z-index: 1;
+            line-height: 1.5;
+        }
+        
+        .terminal-content div {
+            margin-bottom: 5px;
+        }
+        
+        .terminal-prompt {
+            color: var(--hacker-green);
+        }
+        
+        .terminal-command {
+            color: #fff;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .category-grid, .resource-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>SecNav</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#" class="active">首页</a>
+                    <a href="#section2">工具</a>
+                    <a href="#section3">学习资源</a>
+                    <a href="#section4">漏洞库</a>
+                    <a href="#section5">练习平台</a>
+                    <a href="#section6">暗网资源</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="container">
+            <h1>渗透测试资源导航</h1>
+            <p>精心整理的渗透测试工具、漏洞数据库、学习资源和练习平台，帮助安全研究人员高效开展工作</p>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="搜索渗透测试工具、资源...">
+            </div>
+        </div>
+    </section>
+    
+    <div class="container" id="section2">
+        <!-- 新增资源卡片区 -->
+        <section class="new-resources">
+            <h2 class="section-title"><i class="fas fa-star"></i> 最新资源</h2>
+            <div class="resource-grid">
+                <div class="resource-card">
+                    <i class="fas fa-search"></i>
+                    <div class="resource-card-content">
+                        <a href="https://search.censys.io/" target="_blank">Censys - 网络空间搜索引擎</a>
+                        <div class="resource-desc">全球网络设备搜索引擎</div>
+                    </div>
+                </div>
+                
+                <div class="resource-card">
+                    <i class="fas fa-brain"></i>
+                    <div class="resource-card-content">
+                        <a href="https://intelx.io/" target="_blank">Intelligence X - 情报搜索</a>
+                        <div class="resource-desc">深度数据情报搜索引擎</div>
+                    </div>
+                </div>
+                
+                <div class="resource-card">
+                    <i class="fas fa-archive"></i>
+                    <div class="resource-card-content">
+                        <a href="https://archive.org/" target="_blank">Wayback Machine - 网页存档</a>
+                        <div class="resource-desc">历史网页存档查询工具</div>
+                    </div>
+                </div>
+                
+                <div class="resource-card">
+                    <i class="fas fa-bug"></i>
+                    <div class="resource-card-content">
+                        <a href="霍大帅哥.html" target="_blank">jade编程</a>
+                        <div class="resource-desc">网络安全渗透</div>
+                    </div>
+                </div>
+
+                <div class="resource-card">
+                    <i class="fas fa-eye"></i>
+                    <div class="resource-card-content">
+                        <a href="https://www.zoomeye.ai/" target="_blank">ZoomEye - 钟馗之眼</a>
+                        <div class="resource-desc">网络空间搜索引擎</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="categories">
+            <h2 class="section-title"><i class="fas fa-tools"></i> 渗透测试工具</h2>
+            <div class="category-grid">
+                <div class="category-card">
+                    <div class="category-header">
+                        <div class="category-icon">
+                            <i class="fas fa-fingerprint"></i>
+                        </div>
+                        <h3 class="category-title">信息收集</h3>
+                    </div>
+                    <ul class="resource-list">
+                        <li class="resource-item"><a href="https://fofa.info/" target="_blank"><i class="fas fa-external-link-alt"></i> FOFA - 网络空间测绘引擎</a></li>
+                        <li class="resource-item"><a href="https://whois.chinaz.com/" target="_blank"><i class="fas fa-external-link-alt"></i> 站长工具 - WHOIS查询</a></li>
+                        <li class="resource-item"><a href="https://zh.subdomains.whoisxmlapi.com/lookup" target="_blank"><i class="fas fa-external-link-alt"></i> 旁站子域名查询</a></li>
+                        <li class="resource-item"><a href="https://sitereport.netcraft.com/" target="_blank"><i class="fas fa-external-link-alt"></i> Netcraft - 在线安全报告</a></li>
+                        <li class="resource-item"><a href="https://whatcms.org/" target="_blank"><i class="fas fa-external-link-alt"></i> WhatCMS - CMS指纹识别</a></li>
+                        <li class="resource-item"><a href="https://crt.sh/" target="_blank"><i class="fas fa-external-link-alt"></i> crt.sh - SSL证书查询</a></li>
+                    </ul>
+                </div>
+                
+                <div class="category-card">
+                    <div class="category-header">
+                        <div class="category-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h3 class="category-title">加密/解密</h3>
+                    </div>
+                    <ul class="resource-list">
+                        <li class="resource-item"><a href="http://www.phpjm.net/encode.html" target="_blank"><i class="fas fa-external-link-alt"></i> PHP在线加密工具</a></li>
+                        <li class="resource-item"><a href="https://www.cmd5.com/" target="_blank"><i class="fas fa-external-link-alt"></i> CMD5 - 加密解密平台</a></li>
+                        <li class="resource-item"><a href="https://socarchina.com/m/sfz/index.php" target="_blank"><i class="fas fa-external-link-alt"></i> 身份证生成器</a></li>
+                        <li class="resource-item"><a href="https://www.toolhelper.cn/Image/ImageToIco" target="_blank"><i class="fas fa-external-link-alt"></i> 图片转ICO工具</a></li>
+                        <li class="resource-item"><a href="https://pdftoword.55.la/img2icon/" target="_blank"><i class="fas fa-external-link-alt"></i> 在线ICON转换</a></li>
+                    </ul>
+                </div>
+                
+                <div class="category-card">
+                    <div class="category-header">
+                        <div class="category-icon">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <h3 class="category-title">网络工具</h3>
+                    </div>
+                    <ul class="resource-list">
+                        <li class="resource-item"><a href="https://www.baidu.com/" target="_blank"><i class="fas fa-external-link-alt"></i> 百度搜索</a></li>
+                        <li class="resource-item"><a href="https://yandex.com/" target="_blank"><i class="fas fa-external-link-alt"></i> Yanden</a></li>
+                        <li class="resource-item"><a href="https://www.douyin.com/" target="_blank"><i class="fas fa-external-link-alt"></i> 抖音平台</a></li>
+                        <li class="resource-item"><a href="https://www.bilibili.com/" target="_blank"><i class="fas fa-external-link-alt"></i> bilibili</a></li>
+                        <li class="resource-item"><a href="https://www.youtube.com/" target="_blank"><i class="fas fa-external-link-alt"></i> YouTube</a></li>
+
+
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section class="categories" id="section3">
+            <h2 class="section-title"><i class="fas fa-book"></i> 学习资源</h2>
+            <div class="category-grid">
+                <div class="category-card">
+                    <div class="category-header">
+                        <div class="category-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3 class="category-title">在线课程</h3>
+                    </div>
+                    <ul class="resource-list">
+                        <li class="resource-item"><a href="https://www.bachang.org/" target="_blank"><i class="fas fa-external-link-alt"></i> 免费靶场</a></li>
+                        <li class="resource-item"><a href="https://www.runoob.com/" target="_blank"><i class="fas fa-external-link-alt"></i> 菜鸟教程</a></li>
+                        <li class="resource-item"><a href="https://www.shentoushi.top/" target="_blank"><i class="fas fa-external-link-alt"></i> 渗透师 - 安全导航</a></li>
+                        <li class="resource-item"><a href="https://forum.ywhack.com/bountytips.php" target="_blank"><i class="fas fa-external-link-alt"></i> 棱角社区工具库</a></li>
+                    </ul>
+                </div>
+                
+                <div class="category-card">
+                    <div class="category-header">
+                        <div class="category-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h3 class="category-title">博客与社区</h3>
+                    </div>
+                    <ul class="resource-list">
+                        <li class="resource-item"><a href="https://www.csdn.net/" target="_blank"><i class="fas fa-external-link-alt"></i> CSDN博客</a></li>
+                        <li class="resource-item"><a href="https://www.freebuf.com/" target="_blank"><i class="fas fa-external-link-alt"></i> FreeBuf - 网络安全门户</a></li>
+                        <li class="resource-item"><a href="https://0xafe.netlify.app/" target="_blank"><i class="fas fa-external-link-alt"></i> SRCs|安全应急响应中心</a></li>
+                        <li class="resource-item"><a href="https://www.cnblogs.com/" target="_blank"><i class="fas fa-external-link-alt"></i> 博客园</a></li>
+                        <li class="resource-item"><a href="https://greasyfork.org/zh-CN" target="_blank"><i class="fas fa-external-link-alt"></i> 用户脚本站</a></li>
+                    </ul>
+                </div>
+                
+                <div class="category-card">
+                    <div class="category-header">
+                        <div class="category-icon">
+                            <i class="fas fa-blog"></i>
+                        </div>
+                        <h3 class="category-title">论坛与社区</h3>
+                    </div>
+                    <ul class="resource-list">
+                        <li class="resource-item"><a href="https://www.anwangxia.com/" target="_blank"><i class="fas fa-external-link-alt"></i> 暗网下</a></li>
+                        <li class="resource-item"><a href="https://www.topert4.com/" target="_blank"><i class="fas fa-external-link-alt"></i> 黑客论坛</a></li>
+                        <li class="resource-item"><a href="https://0day.today/" target="_blank"><i class="fas fa-external-link-alt"></i> 0day交易</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section class="categories"  id="section4">
+            <h2 class="section-title"><i class="fas fa-bug"></i> 漏洞数据库</h2>
+            <div class="category-grid">
+                <div class="category-card">
+                    <div class="category-header">
+                        <div class="category-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3 class="category-title">漏洞库</h3>
+                    </div>
+                    <ul class="resource-list">
+                        <li class="resource-item"><a href="https://cve.mitre.org/cve/search_cve_list.html" target="_blank"><i class="fas fa-external-link-alt"></i> CVE漏洞数据库</a></li>
+                        <li class="resource-item"><a href="https://www.cve.org/" target="_blank"><i class="fas fa-external-link-alt"></i> 新CVE数据库</a></li>
+                        <li class="resource-item"><a href="https://www.seebug.org/" target="_blank"><i class="fas fa-external-link-alt"></i> Seebug漏洞数据库</a></li>
+                        <li class="resource-item"><a href="https://www.exploit-db.com/" target="_blank"><i class="fas fa-external-link-alt"></i> Exploit-DB漏洞库</a></li>
+                    </ul>
+                </div>
+                
+                <div class="category-card" id="section6">
+                    <div class="category-header">
+                        <div class="category-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 class="category-title">漏洞公告</h3>
+                    </div>
+                    <ul class="resource-list">
+                        <li class="resource-item"><a href="https://nvd.nist.gov/" target="_blank"><i class="fas fa-external-link-alt"></i> NVD国家漏洞数据库</a></li>
+                        <li class="resource-item"><a href="https://www.securityfocus.com/" target="_blank"><i class="fas fa-external-link-alt"></i> SecurityFocus安全焦点</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 终端样式展示 -->
+        <div class="terminal">
+            <div class="terminal-header">
+                <div class="terminal-dot dot-red"></div>
+                <div class="terminal-dot dot-yellow"></div>
+                <div class="terminal-dot dot-green"></div>
+            </div>
+            <div class="terminal-content">
+                <div><span class="terminal-prompt">user@secnav:~$ </span><span class="terminal-command">nmap -sV -O 192.168.1.1</span></div>
+                <div>Starting Nmap 7.92 ( https://nmap.org ) at 2023-07-15 14:30 UTC</div>
+                <div>Nmap scan report for router.local (192.168.1.1)</div>
+                <div>Host is up (0.0020s latency).</div>
+                <div>PORT   STATE SERVICE VERSION</div>
+                <div>80/tcp open  http    TP-Link wireless WDR3600 router http admin</div>
+                <div>MAC Address: 11:22:33:44:55:66 (Tp-Link Technologies)</div>
+                <div><span class="terminal-prompt">user@secnav:~$ </span><span class="blink">_</span></div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="#">关于我们</a>
+                <a href="#">使用条款</a>
+                <a href="#">隐私政策</a>
+                <a href="#">贡献指南</a>
+                <a href="#">联系我们</a>
+            </div>
+            <p>SecNav - 渗透测试资源导航 &copy; 2023 本网站仅用于安全研究目的</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 搜索功能
+        document.querySelector('.search-box input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const resources = document.querySelectorAll('.resource-item a, .resource-card a');
+            
+            resources.forEach(resource => {
+                const text = resource.textContent.toLowerCase();
+                const item = resource.closest('.resource-item') || resource.closest('.resource-card');
+                
+                if (text.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+        
+        // 卡片悬停效果增强
+        const cards = document.querySelectorAll('.category-card, .resource-card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-8px)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+        
+        // 终端光标闪烁效果
+        setInterval(() => {
+            const cursor = document.querySelector('.blink');
+            cursor.style.visibility = cursor.style.visibility === 'hidden' ? 'visible' : 'hidden';
+        }, 500);
+    </script>
+</body>
+</html>
